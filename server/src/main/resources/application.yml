@@ -1,0 +1,71 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update  # (1) 스키마 자동 생성
+    show-sql: true      # (2) SQL 쿼리 출력
+    properties:
+      hibernate:
+        format_sql: true  # (3) SQL pretty print
+        highlight_sql: true
+        color-codes: true
+        use_sql_comments: true
+        defer-datasource-initialization: true
+  output:
+    ansi:
+      enabled: ALWAYS
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: error
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+      springframework:
+        orm:
+          jpa: DEBUG
+server:
+  servlet:
+    encoding:
+      force-response: true
+  mail:
+    host: smtp.gmail.com # 1
+    port: 587 # 2
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true # 5 사용자 인증시도 여부 기본값 false
+          #timeout: 5000 # 6 Socket Read Timeout 시간(ms)
+          starttls:
+            enable: true # 7 StartTLS 활성화 여부 기본값 false
+            required: true
+mail:
+  address:
+    admin: ${ADMIN_MAIL}
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 420
+  refresh-token-expiration-minutes: 420
+AUTH_CODE_EXPIRATION: 600
+redis:
+  host: ${EC2_IP}
+  port: 6379
+aws:
+  access-key-id: ${AWS_ACCESS_KEY}
+  secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+  region: ap-northeast-2
+  s3:
+    bucket-name: ${AWS_S3_BUCKET}
