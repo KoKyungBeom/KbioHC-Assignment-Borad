@@ -1,0 +1,112 @@
+name: Java CI with Gradle
+on:
+  push:
+    branches: [ main, dev ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'zulu'
+
+      - name: Initialize Gradle Wrapper
+        working-directory: ./server
+        run: |
+          chmod +x gradlew
+          ./gradlew wrapper
+
+      - name: Build with Gradle
+        working-directory: ./server
+        run: ./gradlew build
+
+      - name: Docker build
+        working-directory: ./server
+        run: |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker build -t board .
+          docker tag board kokyungbum/board:${GITHUB_SHA::7}
+          docker push kokyungbum/board:${GITHUB_SHA::7}
+
+      # AWS credentials configuration
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Start Session Manager session
+        run: aws ssm start-session --target i-051836f29d02ec06a
+
+      - name: Deploy to Server
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
+        run: |
+          aws ssm send-command \
+            --instance-ids i-051836f29d02ec06a \
+            --document-name "AWS-RunShellScript" \
+            --parameters "commands=[
+              'if sudo docker ps -a --format \\'{{.Names}}\\' | grep -q \\'^server$\\'; then',
+              '  sudo docker stop server',
+              '  sudo docker rm server',
+              'fi',
+              'sudo docker pull kokyungbum/board:${GITHUB_SHA::7}',
+              'sudo docker tag kokyungbum/board:${GITHUB_SHA::7} board',
+              'sudo docker run -d --name server -p 8080:8080 \\
+          -e DATASOURCE_URL=${{ secrets.DATASOURCE_URL }} \\
+          -e DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }} \\
+          -e DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }} \\
+          -e EC2_IP=${{ secrets.EC2_IP }} \\
+          -e G_CLIENT_ID=${{ secrets.G_CLIENT_ID }} \\
+          -e G_CLIENT_SECRET=${{ secrets.G_CLIENT_SECRET }} \\
+          -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \\
+          -e EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }} \\
+          -e EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \\
+          -e ADMIN_MAIL=${{ secrets.ADMIN_MAIL }} \\
+          -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \\
+          -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \\
+          -e AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }} \\
+          board'
+            ]" \
+            --output text
+
+# client - deploy
+  client-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+
+      - name: Create .env file
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > ./client/.env
+
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Build static file
+        working-directory: ./client
+        run: CI=false npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Deploy static site to S3 bucket
+        run: aws s3 sync ./client/build s3://simple-board
