@@ -1,0 +1,249 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    height: 100vh;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding: 10px 0;
+}
+
+.main-title {
+    margin: 0 auto;
+    font-size: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.user-actions {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.user-actions button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.user-actions button:hover {
+    background-color: #0056b3;
+}
+
+.posts-container {
+    width: 60%;
+    margin-top: 20px;
+}
+
+.posts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    background-color: white;
+}
+
+.posts-table th,
+.posts-table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 15px;
+}
+
+.posts-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 테이블 열 너비 설정 */
+.posts-table th:nth-child(1),
+.posts-table td:nth-child(1) {
+    width: 50px;
+}
+
+.posts-table th:nth-child(2),
+.posts-table td:nth-child(2) {
+    width: 150px;
+}
+
+.posts-table th:nth-child(3),
+.posts-table td:nth-child(3) {
+    width: 500px;
+}
+
+.posts-table th:nth-child(4),
+.posts-table td:nth-child(4) {
+    width: 150px;
+}
+
+.posts-table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* 공지사항 강조 */
+.notice-row {
+    background-color: #fff8dc;
+    font-weight: bold;
+}
+
+.notice-row:hover {
+    background-color: #ffe4b5;
+}
+
+/* 검색 및 정렬 영역 */
+.search-and-sort-wrapper {
+    background-color: transparent;
+}
+
+.search-and-sort {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* 검색 입력칸 */
+.search-input {
+    flex: 2;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* 검색 기준 드롭다운 */
+.search-select {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* 검색 버튼 */
+.search-button {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* 정렬 기준 드롭다운 */
+.sort-select {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* 페이지네이션 */
+.pagination-container {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination-button {
+    all: unset;
+    display: inline-block;
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.pagination-button:hover {
+    background-color: #0056b3;
+}
+
+.pagination-info {
+    font-size: 14px;
+    margin: 0 10px;
+}
+
+/* 작성 버튼 */
+.write-button-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px; /* 버튼 간 간격 추가 */
+}
+
+.write-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.write-button:hover {
+    background-color: #0056b3;
+}
+.toggle-notices-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 활성 상태 (공지사항만 보기 활성화) */
+.toggle-notices-button.active {
+    background-color: #0056b3;
+}
+
+/* 공지사항 보기 버튼 hover */
+.toggle-notices-button:hover {
+    background-color: #0056b3;
+}

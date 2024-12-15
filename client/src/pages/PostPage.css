@@ -1,0 +1,213 @@
+.post-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+}
+
+.post-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.post-content-container {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.post-details p, .post-body p {
+    margin: 10px 0;
+}
+
+.post-image {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.post-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.comments-section {
+    margin-top: 20px;
+}
+
+.comments-section h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.comment {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment p {
+    margin: 5px 0;
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #666;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.back-button {
+    background-color: #007bff;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.edit-button {
+    background-color: #ffc107;
+}
+
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #bd2130;
+}
+.comment-input-section {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: none;
+    margin-right: 10px;
+}
+
+.submit-comment-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-comment-button:hover {
+    background-color: #0056b3;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.comment-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    margin-top: 10px;
+}
+
+.comment-content {
+    flex: 1; /* 댓글 본문 공간을 유연하게 조정 */
+    margin-right: 10px; /* 버튼과의 간격 추가 */
+}
+
+.comment-edit-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: none;
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #888;
+    margin-right: 10px;
+}
+
+.edit-comment-button
+ {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px; /* 시간과의 간격 추가 */
+}
+
+.edit-comment-button:hover {
+    background-color: #e0a800;
+}
+.complete-comment-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.complete-comment-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-comment-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px; /* 시간과의 간격 추가 */
+}
+
+.delete-comment-button:hover {
+    background-color: #bd2130;
+}
