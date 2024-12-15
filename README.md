@@ -49,9 +49,17 @@ bash -> git clone <레포지토리-URL> -> cd <프로젝트-폴더>
 clinet는 npm install 후에 npm start로 시작
 server는 resources 폴더에 application.yml을 만들고 시작
 
-간편하게 실행하는법
+---
+
+간편하게 아래 링크로 가셔서 테스트 하실 수 있습니다.
+
 http://simple-board.s3-website.ap-northeast-2.amazonaws.com 클라이언트 배포주소
-http://ec2-43-200-241-1.ap-northeast-2.compute.amazonaws.com:8080 API요청 주소
+
+http://ec2-43-200-241-1.ap-northeast-2.compute.amazonaws.com:8080 API 요청 주소
+
+관리자 계정 ID : admin@gmail.com 관리자 계정 비밀번호 : qwer1234!! 
+
+이메일 인증 번거로우시면 인증 코드에 kbiohc 입력하면 됩니다!
 
 ---
 
