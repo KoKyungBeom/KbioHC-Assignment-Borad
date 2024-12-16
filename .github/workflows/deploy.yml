@@ -18,6 +18,13 @@ jobs:
         with:
           java-version: '11'
           distribution: 'zulu'
+          
+      - name: Set YML
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          find src
+          echo $DATASOURCE_URL
 
       # application.yml 생성
       - name: Set YML
