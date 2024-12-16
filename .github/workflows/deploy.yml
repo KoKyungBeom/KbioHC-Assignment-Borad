@@ -1,31 +1,55 @@
 name: Java CI with Gradle
+
 on:
   push:
     branches: [ main, dev ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 코드 체크아웃
       - uses: actions/checkout@v2
 
+      # JDK 11 설정
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'zulu'
 
+      # application.yml 생성
+      - name: Set YML
+        working-directory: ./server
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          find src
+
+      # application.yml 확인
+      - name: Check application.yml
+        working-directory: ./server
+        run: |
+          if [ ! -f src/main/resources/application.yml ]; then
+            echo "application.yml not found!"
+            exit 1
+          fi
+
+      # Gradle Wrapper 초기화
       - name: Initialize Gradle Wrapper
         working-directory: ./server
         run: |
           chmod +x gradlew
           ./gradlew wrapper
 
+      # Gradle 빌드
       - name: Build with Gradle
         working-directory: ./server
         run: ./gradlew build
 
-      - name: Docker build
+      # Docker 이미지 빌드 및 푸시
+      - name: Docker build and push
         working-directory: ./server
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -33,7 +57,7 @@ jobs:
           docker tag board kokyungbum/board:${GITHUB_SHA::7}
           docker push kokyungbum/board:${GITHUB_SHA::7}
 
-      # AWS credentials configuration
+      # AWS 자격증명 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -41,9 +65,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Start Session Manager session
-        run: aws ssm start-session --target i-051836f29d02ec06a
-
+      # AWS SSM 명령 실행 (서버 배포)
       - name: Deploy to Server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -78,29 +100,37 @@ jobs:
             ]" \
             --output text
 
-# client - deploy
+  # 클라이언트 배포
   client-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 코드 체크아웃
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup node
+      # Node 설정
+      - name: Setup Node
         uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
+      # .env 파일 생성
       - name: Create .env file
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > ./client/.env
 
+      # 의존성 설치
       - name: Install dependencies
         working-directory: ./client
         run: npm install
 
+      # 빌드
       - name: Build static file
         working-directory: ./client
         run: CI=false npm run build
 
+      # AWS 자격증명 설정
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -108,5 +138,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      # S3 버킷에 배포
       - name: Deploy static site to S3 bucket
         run: aws s3 sync ./client/build s3://simple-board
